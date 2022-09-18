@@ -15,7 +15,7 @@ endif
 setlocal iskeyword+=-
 syntax case match
 
-syn keyword tmuxAction  any current none
+syn keyword tmuxAction  any current none other latest
 syn keyword tmuxBoolean off on
 syn keyword tmuxOptionValue top bottom left right top-left top-right
 syn keyword tmuxOptionValue bottom-left bottom-right centre
@@ -23,6 +23,14 @@ syn keyword tmuxOptionValue vi emacs copy
 syn keyword tmuxOptionValue bash zsh fish
 syn keyword tmuxLayoutOptionValue even-horizontal even-vertical main-horizontal
 syn keyword tmuxLayoutOptionValue main-vertical tiled
+
+syn keyword tmuxSetHookActions alert-activity alert-bell alert-silence client-active
+syn keyword tmuxSetHookActions client-attached client-detached client-focus-in
+syn keyword tmuxSetHookActions client-focus-out client-resized client-session-changed
+syn keyword tmuxSetHookActions pane-died pane-exited pane-focus-in pane-focus-out
+syn keyword tmuxSetHookActions pane-set-clipboard session-created session-closed
+syn keyword tmuxSetHookActions session-renamed windows-linked window-renamed
+syn keyword tmuxSetHookActions window-resized window-unlinked
 
 syn keyword tmuxClientSessionCmds attach[-session] detach[-client] has[-session]
 syn keyword tmuxClientSessionCmds kill-server kill-session lsc list-clients lscm
@@ -59,7 +67,7 @@ syn keyword tmuxBufferCmds delete-buffer lsb list-buffers loadb load-buffer
 syn keyword tmuxBufferCmds pasteb paste-buffer saveb save-buffer setb set-buffer
 syn keyword tmuxBufferCmds showb show-buffer
 
-syn keyword tmuxMiscCmds clock-mode if[-shell] lock[-server] wait[-for]
+syn keyword tmuxMiscCmds clock-mode if[-shell] run[-shell] lock[-server] wait[-for]
 " obsolete (not in manpage anymore)
 syn keyword tmuxMiscCmds info server-info
 
@@ -87,6 +95,7 @@ syn keyword tmuxOptsSet bell-on-alert mouse-select-window mouse-utf8
 syn keyword tmuxOptsSet mouse-resize-pane mouse
 syn keyword tmuxOptsSet renumber-windows visual-silence
 syn keyword tmuxOptsSet show[-options] showw show-window-options
+syn keyword tmuxOptsSet activity-action silence-action
 
 syn match tmuxUserOptsSet /@[[:alnum:]_-]\+/ display
 
@@ -99,7 +108,7 @@ syn keyword tmuxOptsSetw main-pane-width main-pane-height monitor-content
 syn keyword tmuxOptsSetw window-status-current-attr window-status-current-bg
 syn keyword tmuxOptsSetw window-status-current-fg mode-mouse synchronize-panes
 syn keyword tmuxOptsSetw window-status-format window-status-current-format
-syn keyword tmuxOptsSetw window-status-activity-attr
+syn keyword tmuxOptsSetw window-status-activity-attr window-size
 syn keyword tmuxOptsSetw window-status-activity-bg window-status-activity-fg
 syn keyword tmuxOptsSetw window-status-bell-attr
 syn keyword tmuxOptsSetw window-status-bell-bg window-status-bell-fg
@@ -110,6 +119,11 @@ syn keyword tmuxOptsSetw window-status-last-fg window-status-last-bg
 syn keyword tmuxOptsSetw pane-base-index other-pane-height other-pane-width
 syn keyword tmuxOptsSetw allow-rename c0-change-interval c0-change-trigger
 syn keyword tmuxOptsSetw layout-history-limit monitor-silence utf8 wrap-search
+syn keyword tmuxOptsSetw status-style window-status-style window-status-current-style
+syn keyword tmuxOptsSetw window-status-bell-style window-style window-active-style
+syn keyword tmuxOptsSetw status-left-style status-right-style message-style
+syn keyword tmuxOptsSetw pane-border-style pane-active-border-style mode-style
+syn keyword tmuxOptsSetw copy-mode-match-style mark-style current-match-style
 
 " keywords for vi/emacs edit, choice and copy modes
 syn keyword tmuxModeCmds append-selection back-to-indentation backspace
@@ -139,9 +153,12 @@ syn keyword tmuxKeySymbol F1 F2 F3 F4 F5 F6 F7 F8 F9 F10 F11 F12
 syn keyword tmuxKeySymbol NPage PageDown PgDn PPage PageUp PgUp
 syn keyword tmuxKeySymbol Up Down Left Right
 
-" these commands are special when at the beginning of the line
+" These commands are special when at the beginning of the line
 syn match tmuxMiscCmds        /run\(-shell\)\?/ display
 syn match tmuxSpecialCmds /^\s*run\(-shell\)\?/ display
+
+syn match tmuxMiscCmds        /if\(-shell\)\?/ display
+syn match tmuxSpecialCmds /^\s*if\(-shell\)\?/ display
 
 syn match tmuxBindingCmds     /bind\(-key\)\?/ display
 syn match tmuxSpecialCmds /^\s*bind\(-key\)\?/ display
@@ -215,6 +232,7 @@ hi def link tmuxOptionValue         Constant
 hi def link tmuxLayoutOptionValue   Constant
 
 hi def link tmuxClientSessionCmds   Keyword
+hi def link tmuxSetHookActions      Keyword
 hi def link tmuxWindowPaneCmds      Keyword
 hi def link tmuxBindingCmds         Keyword
 hi def link tmuxEnvironmentCmds     Keyword
